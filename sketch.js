@@ -43,8 +43,7 @@ function draw() {
 
   let margin = 10;
   let canvasWidth = width - 2 * margin;
-  let lineHeight = ((height / 2 - 2 * margin) / 4) * 0.8; 
-  textSize(lineHeight * 0.35);
+  let lineHeight = ((height / 2 - 2 * margin) / 4) * 0.8;
 
   // ===== 上半分：文章描画 =====
   for (let i = 0; i < 4; i++) {
@@ -55,20 +54,21 @@ function draw() {
     for (let j = 0; j < lines[i].length; j++) {
       let letter = lines[i][j];
       let img = imgs[letter];
+
+      // 文字サイズをローカルに設定
+      push();
+      textSize(lineHeight * 0.25); // 小さく
+      fill(0);
+      text(letter, x + cellW / 2, y + lineHeight * 0.75);
+      pop();
+
+      // 画像描画は元通り
       if (img) {
         let imgScale = min(cellW / img.width, (lineHeight * 0.5) / img.height);
         imageMode(CENTER);
-        image(
-          img,
-          x + cellW / 2,
-          y + lineHeight / 3,
-          img.width * imgScale,
-          img.height * imgScale
-        );
+        image(img, x + cellW / 2, y + lineHeight / 3, img.width * imgScale, img.height * imgScale);
       }
-      fill(0);
-      push();
-      text(letter, x + cellW / 2, y + lineHeight * 0.75);
+
       x += cellW;
     }
   }
@@ -76,14 +76,12 @@ function draw() {
   // ===== カーソル =====
   let cursorCol = lines[currentLine].length;
   let cellW = canvasWidth / maxPerLine;
-
   if (currentLine === 3 && cursorCol >= maxPerLine) {
     cursorCol = maxPerLine - 1;
   } else if (cursorCol >= maxPerLine) {
     cursorCol = 0;
     if (currentLine < 3) currentLine++;
   }
-
   let cursorX = cursorCol * cellW + margin;
   let cursorY = margin + currentLine * lineHeight;
   noStroke();
@@ -126,40 +124,32 @@ function draw() {
     let img = imgs[mapping[i].letter];
     let imgScale = min(buttonW / img.width, (buttonH * 0.5) / img.height);
     imageMode(CENTER);
-    image(
-      img,
-      bx + buttonW / 2,
-      by + buttonH * 0.45,
-      img.width * imgScale,
-      img.height * imgScale
-    );
+    image(img, bx + buttonW / 2, by + buttonH * 0.45, img.width * imgScale, img.height * imgScale);
 
     fill(0);
+    textSize(16); // 下ボタン文字は元のサイズ
     text(mapping[i].letter, bx + buttonW / 2, by + buttonH * 0.8);
   }
 }
 
-// ===== 統一されたボタン描画関数 =====
 function drawButton(label, x, y, w, h, col) {
   fill(col);
   rect(x, y, w, h, 10);
   fill(0);
   textAlign(CENTER, CENTER);
+  textSize(16); // ボタン文字も元サイズ
   text(label, x + w / 2, y + h / 2);
 }
 
-// ===== ボタン判定 =====
 function mousePressed() {
   handleButtons();
 }
 
-// ===== タップ対応 =====
 function touchStarted() {
   handleButtons();
-  return false; // これで画面全体の選択を防ぐ
+  return false; // 画面全体の選択防止
 }
 
-// ===== ボタン処理共通関数 =====
 function handleButtons() {
   let btnW = width * 0.2;
   let btnH = height * 0.06;
@@ -173,7 +163,6 @@ function handleButtons() {
     btnMargin * 4 + btnW * 3,
   ];
 
-  // 操作ボタン
   // Back
   if (mouseY > btnY && mouseY < btnY + btnH && mouseX > btnX[0] && mouseX < btnX[0] + btnW) {
     if (lines[currentLine].length > 0) {
@@ -223,7 +212,6 @@ function handleButtons() {
   }
 }
 
-// 文字追加関数
 function pushLetter(letter) {
   if (lines[currentLine].length < maxPerLine) {
     lines[currentLine].push(letter);
@@ -233,6 +221,3 @@ function pushLetter(letter) {
   }
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
