@@ -28,7 +28,9 @@ let currentLine = 0;
 let maxPerLine = 16;
 
 function preload() {
-  mapping.forEach((m) => (imgs[m.letter] = loadImage(m.file)));
+  mapping.forEach((m) => {
+    imgs[m.letter] = loadImage(m.file);
+  });
 }
 
 function setup() {
@@ -95,10 +97,10 @@ function draw() {
   let btnMargin = (width - btnW * 4) / 5;
 
   let buttons = [
-    { label: "Back", color: color(159,200,213) },
-    { label: "Space", color: color(159,200,213) },
+    { label: "Back", color: color(159, 200, 213) },
+    { label: "Space", color: color(159, 200, 213) },
     { label: "Enter", color: color(40, 113, 136) },
-    { label: "Clear", color: color(150,228,219) },
+    { label: "Clear", color: color(150, 228, 219) },
   ];
   buttons.forEach((b, i) => {
     b.x = btnMargin * (i + 1) + btnW * i;
@@ -137,18 +139,9 @@ function draw() {
     text(mapping[i].letter, bx + buttonW / 2, by + buttonH * 0.8);
   }
 }
-
-function drawButton(label, x, y, w, h) {
-  fill(200);
-  rect(x, y, w, h, 10);
-  fill(0);
-  textAlign(CENTER, CENTER);
-  text(label, x + w / 2, y + h / 2);
-}
-
-function mouseReleased() {
+function mousePressed() {
   let btnW = width * 0.2;
-  let btnH = height * 0.05;
+  let btnH = height * 0.06;
   let btnY = height / 2 - btnH * 1.5;
   let btnMargin = (width - btnW * 4) / 5;
 
