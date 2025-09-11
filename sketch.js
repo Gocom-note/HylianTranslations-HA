@@ -67,7 +67,11 @@ function draw() {
         );
       }
       fill(0);
-      text(letter, x + cellW / 2, y + lineHeight * 0.75);
+      push();
+translate(x + cellW / 2, y + lineHeight * 0.75);
+if (letter.length === 2) rotate(-PI / 6); // 左上に少し傾ける
+text(letter, 0, 0);
+pop();
       x += cellW;
     }
   }
