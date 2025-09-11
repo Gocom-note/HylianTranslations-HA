@@ -44,7 +44,7 @@ function draw() {
   let margin = 10;
   let canvasWidth = width - 2 * margin;
   let lineHeight = ((height / 2 - 2 * margin) / 4) * 0.8; 
-  textSize(lineHeight * 0.35);
+  textSize(lineHeight * 0.2);
 
   // ===== 上半分：文章描画 =====
   for (let i = 0; i < 4; i++) {
@@ -67,7 +67,7 @@ function draw() {
         );
       }
       fill(0);
-      text(letter, x + cellW / 2, y + lineHeight * 0.75);
+      text(letter, x + cellW / 2, y + lineHeight * 0.7);
       x += cellW;
     }
   }
