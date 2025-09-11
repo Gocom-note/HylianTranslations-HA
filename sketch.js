@@ -43,7 +43,7 @@ function draw() {
 
   let margin = 10;
   let canvasWidth = width - 2 * margin;
-  let lineHeight = ((height / 2 - 2 * margin) / 4) * 0.8; // 上半分を4行に分割
+  let lineHeight = ((height / 2 - 2 * margin) / 4) * 0.8; 
   textSize(lineHeight * 0.35);
 
   // ===== 上半分：文章描画 =====
@@ -76,7 +76,6 @@ function draw() {
   let cursorCol = lines[currentLine].length;
   let cellW = canvasWidth / maxPerLine;
 
-  // 4行目の最後で止める
   if (currentLine === 3 && cursorCol >= maxPerLine) {
     cursorCol = maxPerLine - 1;
   } else if (cursorCol >= maxPerLine) {
@@ -91,9 +90,9 @@ function draw() {
   rect(cursorX, cursorY, cellW, lineHeight);
 
   // ===== 操作ボタン =====
-  let btnW = width * 0.2; // canvas 幅の15%に変更
-  let btnH = height * 0.06; // 高さも相対値
-  let btnY = height / 2 - btnH * 1.5; // 適宜調整
+  let btnW = width * 0.2;
+  let btnH = height * 0.06;
+  let btnY = height / 2 - btnH * 1.5;
   let btnMargin = (width - btnW * 4) / 5;
 
   let buttons = [
@@ -111,9 +110,8 @@ function draw() {
   let cols = 7;
   let rows = ceil(mapping.length / cols);
   let buttonW = width / cols;
-  let buttonH = height / 2 / rows; // 変更した高さでもここで共通化
+  let buttonH = height / 2 / rows;
 
-  // ===== 描画 =====
   for (let i = 0; i < mapping.length; i++) {
     let col = i % cols;
     let rowIndex = floor(i / cols);
@@ -139,7 +137,29 @@ function draw() {
     text(mapping[i].letter, bx + buttonW / 2, by + buttonH * 0.8);
   }
 }
+
+// ===== 統一されたボタン描画関数 =====
+function drawButton(label, x, y, w, h, col) {
+  fill(col);
+  rect(x, y, w, h, 10);
+  fill(0);
+  textAlign(CENTER, CENTER);
+  text(label, x + w / 2, y + h / 2);
+}
+
+// ===== ボタン判定 =====
 function mousePressed() {
+  handleButtons();
+}
+
+// ===== タップ対応 =====
+function touchStarted() {
+  handleButtons();
+  return false; // これで画面全体の選択を防ぐ
+}
+
+// ===== ボタン処理共通関数 =====
+function handleButtons() {
   let btnW = width * 0.2;
   let btnH = height * 0.06;
   let btnY = height / 2 - btnH * 1.5;
@@ -152,13 +172,9 @@ function mousePressed() {
     btnMargin * 4 + btnW * 3,
   ];
 
+  // 操作ボタン
   // Back
-  if (
-    mouseY > btnY &&
-    mouseY < btnY + btnH &&
-    mouseX > btnX[0] &&
-    mouseX < btnX[0] + btnW
-  ) {
+  if (mouseY > btnY && mouseY < btnY + btnH && mouseX > btnX[0] && mouseX < btnX[0] + btnW) {
     if (lines[currentLine].length > 0) {
       lines[currentLine].pop();
     } else if (currentLine > 0) {
@@ -169,34 +185,19 @@ function mousePressed() {
   }
 
   // Space
-  if (
-    mouseY > btnY &&
-    mouseY < btnY + btnH &&
-    mouseX > btnX[1] &&
-    mouseX < btnX[1] + btnW
-  ) {
+  if (mouseY > btnY && mouseY < btnY + btnH && mouseX > btnX[1] && mouseX < btnX[1] + btnW) {
     pushLetter(" ");
     return;
   }
 
   // Enter
-  if (
-    mouseY > btnY &&
-    mouseY < btnY + btnH &&
-    mouseX > btnX[2] &&
-    mouseX < btnX[2] + btnW
-  ) {
+  if (mouseY > btnY && mouseY < btnY + btnH && mouseX > btnX[2] && mouseX < btnX[2] + btnW) {
     if (currentLine < 3) currentLine++;
     return;
   }
 
   // Clear
-  if (
-    mouseY > btnY &&
-    mouseY < btnY + btnH &&
-    mouseX > btnX[3] &&
-    mouseX < btnX[3] + btnW
-  ) {
+  if (mouseY > btnY && mouseY < btnY + btnH && mouseX > btnX[3] && mouseX < btnX[3] + btnW) {
     lines = [[], [], [], []];
     currentLine = 0;
     return;
@@ -204,26 +205,24 @@ function mousePressed() {
 
   // 文字ボタン
   let cols = 7;
-  let buttonH = height / 2 / ceil(mapping.length / cols);
+  let rows = ceil(mapping.length / cols);
   let buttonW = width / cols;
+  let buttonH = height / 2 / rows;
+
   for (let i = 0; i < mapping.length; i++) {
     let col = i % cols;
     let rowIndex = floor(i / cols);
     let bx = col * buttonW;
     let by = height / 2 + rowIndex * buttonH;
-    if (
-      mouseX > bx &&
-      mouseX < bx + buttonW &&
-      mouseY > by &&
-      mouseY < by + buttonH
-    ) {
+
+    if (mouseX > bx && mouseX < bx + buttonW && mouseY > by && mouseY < by + buttonH) {
       pushLetter(mapping[i].letter);
       break;
     }
   }
 }
 
-// 文字追加関数（行末で次の行へ自動移動）
+// 文字追加関数
 function pushLetter(letter) {
   if (lines[currentLine].length < maxPerLine) {
     lines[currentLine].push(letter);
@@ -235,12 +234,4 @@ function pushLetter(letter) {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-}
-
-function drawButton(label, x, y, w, h, col) {
-  fill(col);
-  rect(x, y, w, h, 10);
-  fill(0);
-  textAlign(CENTER, CENTER);
-  text(label, x + w / 2, y + h / 2);
 }
