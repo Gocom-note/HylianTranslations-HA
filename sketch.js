@@ -44,7 +44,9 @@ function draw() {
   let margin = 10;
   let canvasWidth = width - 2 * margin;
   let lineHeight = ((height / 2 - 2 * margin) / 4) * 0.8; 
-  textSize(lineHeight * 0.35);
+  let txtSize = lineHeight * 0.35;
+if (letter.length === 2) txtSize *= 0.7; // 2文字は少し小さく
+textSize(txtSize);
 
   // ===== 上半分：文章描画 =====
   for (let i = 0; i < 4; i++) {
@@ -68,10 +70,7 @@ function draw() {
       }
       fill(0);
       push();
-translate(x + cellW / 2, y + lineHeight * 0.75);
-if (letter.length === 2) rotate(-PI / 6); // 左上に少し傾ける
-text(letter, 0, 0);
-pop();
+      text(letter, x + cellW / 2, y + lineHeight * 0.75);
       x += cellW;
     }
   }
