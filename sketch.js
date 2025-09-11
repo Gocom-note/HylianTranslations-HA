@@ -67,7 +67,7 @@ function draw() {
         );
       }
       fill(0);
-      text(letter, x + cellW / 2, y + lineHeight * 0.75);
+      text(letter, x + cellW / 2, y + lineHeight * 0.7);
       x += cellW;
     }
   }
