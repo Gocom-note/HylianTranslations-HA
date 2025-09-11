@@ -3,5 +3,7 @@ html, body {
   padding: 0;
 }
 canvas {
-  display: block;
+  touch-action: none;       /* タッチ操作をブラウザに渡さない */
+  -webkit-user-select: none; /* Safariでテキスト選択無効 */
+  user-select: none;        /* 他ブラウザ用 */
 }
