@@ -44,7 +44,7 @@ function draw() {
   let margin = 10;
   let canvasWidth = width - 2 * margin;
   let lineHeight = ((height / 2 - 2 * margin) / 4) * 0.8; // 上半分を4行に分割
-  textSize(lineHeight * 0.25);
+  textSize(lineHeight * 0.22);
 
   // ===== 上半分：文章描画 =====
   for (let i = 0; i < 4; i++) {
